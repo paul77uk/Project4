@@ -16,6 +16,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -53,6 +55,8 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintVersion"
 
     implementation 'com.google.code.gson:gson:2.8.5'
+
+    implementation 'com.android.support:multidex:1.0.3'
 
     // Architecture Components
     //Navigation dependencies
@@ -124,6 +128,10 @@ dependencies {
 
     // Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:28.1.0')
+
+    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
+
+    implementation 'androidx.multidex:multidex:2.0.1'
 
 
 }
