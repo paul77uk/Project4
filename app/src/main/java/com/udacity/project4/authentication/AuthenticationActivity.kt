@@ -4,23 +4,27 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.udacity.project4.R
 import com.udacity.project4.databinding.ActivityAuthenticationBinding
-import com.udacity.project4.locationreminders.RemindersActivity
 
 /**
  * This class should be the starting point of the app, It asks the users to sign in / register, and redirects the
  * signed in users to the RemindersActivity.
  */
-class AuthenticationActivity : AppCompatActivity() {
+class AuthenticationActivity : Fragment() {
 
     companion object {
         const val TAG = "AuthenticationActivity"
@@ -28,46 +32,59 @@ class AuthenticationActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityAuthenticationBinding
-
+    private lateinit var navController: NavController
     private val viewModel by viewModels<AuthenticationViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_authentication)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding =
+            DataBindingUtil.inflate(
+                inflater,
+                R.layout.activity_authentication, container, false
+            )
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         observeAuthenticationState()
 
-//         TODO: Implement the create account and sign in using FirebaseUI, use sign in using email and sign in using Google
+        navController = findNavController()
 
+        // If the user presses the back button, bring them back to the home screen
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            navController.popBackStack(R.id.authenticationActivity, false)
+        }
+
+
+
+        binding.lifecycleOwner = this
         binding.button.setOnClickListener {
             launchSignInFlow()
         }
-
-//          TODO: If the user was authenticated, send him to RemindersActivity
-
-//          TODO: a bonus is to customize the sign in flow to look nice using :
-        //https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md#custom-layout
-
     }
 
     private fun observeAuthenticationState() {
 
-        viewModel.authenticationState.observe(this, Observer { authenticationState ->
+        viewModel.authenticationState.observe(viewLifecycleOwner, Observer { authenticationState ->
             when (authenticationState) {
                 AuthenticationViewModel.AuthenticationState.AUTHENTICATED -> {
-                    startActivity(Intent(this, RemindersActivity::class.java))
-                    finish()
+                    val action =
+                        AuthenticationActivityDirections.actionAuthenticationActivityToReminderListFragment()
+                    findNavController().navigate(action)
+
                 }
                 else -> {
-
+                    binding.button.visibility = View.VISIBLE
                 }
             }
         })
     }
 
     private fun launchSignInFlow() {
-        binding.button.text = "working"
         // Give users the option to sign in / register with their email or Google account. If users
         // choose to register with their email, they will need to create a password as well.
         val providers = arrayListOf(
@@ -89,6 +106,7 @@ class AuthenticationActivity : AppCompatActivity() {
             val response = IdpResponse.fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in user.
+
                 Log.i(
                     TAG,
                     "Successfully signed in user " +
