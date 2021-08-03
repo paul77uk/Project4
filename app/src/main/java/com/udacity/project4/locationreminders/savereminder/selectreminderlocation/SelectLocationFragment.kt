@@ -60,8 +60,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
 
 //        TODO: call this function after the user confirms on the selected location
-//        POSSIBLE SOLUTION
-//        onLocationSelected()
         binding.saveButton.setOnClickListener {
             onLocationSelected()
         }
@@ -183,24 +181,13 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             )
 
             poiName = poi.name
-//
-//            map.addCircle(
-//                CircleOptions()
-//                    .center(poi.latLng)
-//                    .radius(100.0)
-//                    .strokeColor(Color.argb(255,255,0,0))
-//                    .fillColor(Color.argb(64,255,0,0)).strokeWidth(2F)
-//
-//            )
-//
+
             poiMarker.showInfoWindow()
         }
     }
 
     private fun setMapStyle(map: GoogleMap) {
         try {
-            // Customize the styling of the base map using a JSON object defined
-            // in a raw resource file.
             val success = map.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
                     activity,
@@ -240,8 +227,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        // Check if location permissions are granted and if so enable the
-        // location data layer.
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 enableMyLocation()
