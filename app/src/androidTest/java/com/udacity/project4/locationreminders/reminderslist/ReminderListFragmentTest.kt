@@ -109,5 +109,25 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
         verify(navController).navigate(ReminderListFragmentDirections.toSaveReminder())
     }
 
+    @Test
+    fun reminderListFragment_DisplayedInUi() = runBlockingTest {
+
+        val reminder = ReminderDTO(
+            "title",
+            "desc",
+            "loc",
+            0.0, 0.0
+        )
+
+        repository.saveReminder(reminder)
+
+        launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+
+        onView(withText(reminder.title)).check(matches(isDisplayed()))
+        onView(withText(reminder.description)).check(matches(isDisplayed()))
+        onView(withText(reminder.location)).check(matches(isDisplayed()))
+
+    }
+
 
 }
