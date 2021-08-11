@@ -10,12 +10,12 @@ import com.udacity.project4.locationreminders.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers.not
-import org.hamcrest.Matchers.nullValue
+import org.hamcrest.Matchers.`is`
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
 
 @RunWith(AndroidJUnit4::class)
 @ExperimentalCoroutinesApi
@@ -37,6 +37,7 @@ class RemindersListViewModelTest {
 
     @Before
     fun setupViewModel() {
+        stopKoin()
         dataSource = FakeDataSource()
         remindersListViewModel =
             RemindersListViewModel(ApplicationProvider.getApplicationContext(), dataSource)
@@ -45,16 +46,44 @@ class RemindersListViewModelTest {
 //    remindersListViewModel.loadReminders()
 
     @Test
-    fun loadReminders_Test() = runBlockingTest {
+    fun loadReminders_isNotEmpty() = runBlockingTest {
 
         val reminders = ReminderDTO("title", "description", "location", 0.0, 0.0)
 
+        dataSource.deleteAllReminders()
         dataSource.saveReminder(reminders)
         remindersListViewModel.loadReminders()
 
-        val value = remindersListViewModel.remindersList.getOrAwaitValue()
+        // will be false as inserted data
+        val value = remindersListViewModel.showNoData.value
 
-        assertThat(value, not(nullValue()))
+        assertThat(value, `is`(false))
+
+    }
+
+    @Test
+    fun loadReminders_isEmpty() = runBlockingTest {
+
+        dataSource.deleteAllReminders()
+        remindersListViewModel.loadReminders()
+
+        val value = remindersListViewModel.showNoData.value
+
+        assertThat(value, `is`(true))
+
+    }
+
+    @Test
+    fun shouldReturnError_returnException() = runBlockingTest {
+
+        dataSource.deleteAllReminders()
+        dataSource.shouldReturnError = true
+        remindersListViewModel.loadReminders()
+
+        val value = remindersListViewModel.showSnackBar.getOrAwaitValue() == "Exception"
+
+        assertThat(value, `is`(true))
+
     }
 
 }

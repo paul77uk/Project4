@@ -9,7 +9,7 @@ class FakeDataSource : ReminderDataSource {
     //    TODO: Create a fake data source to act as a double to the real data source
     private var reminderDTO = mutableListOf<ReminderDTO>()
 
-    private var shouldReturnError = false
+    var shouldReturnError = false
 
     override suspend fun getReminders(): Result<List<ReminderDTO>> {
         if(shouldReturnError) return Result.Error("Exception")
