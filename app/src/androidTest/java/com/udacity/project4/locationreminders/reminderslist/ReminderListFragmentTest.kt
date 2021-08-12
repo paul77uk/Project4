@@ -6,6 +6,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
@@ -17,6 +19,7 @@ import com.udacity.project4.R
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.local.LocalDB
+import com.udacity.project4.locationreminders.data.local.RemindersDatabase
 import com.udacity.project4.locationreminders.data.local.RemindersLocalRepository
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,9 +51,24 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
 //    TODO: add testing for the error messages.
     private lateinit var repository: ReminderDataSource
     private lateinit var appContext: Application
+    private lateinit var database: RemindersDatabase
 
     @get: Rule
     var instantExecutorRule = InstantTaskExecutorRule()
+
+    @Before
+    fun initDB() {
+
+        database = Room.inMemoryDatabaseBuilder(
+            ApplicationProvider.getApplicationContext(),
+            RemindersDatabase::class.java
+        ).allowMainThreadQueries().build()
+    }
+
+    @After
+    fun closeDB() {
+        database.close()
+    }
 
     @Before
     fun setup() {
@@ -120,7 +138,7 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
             0.0, 0.0
         )
 
-        repository.saveReminder(reminder)
+        database.reminderDao().saveReminder(reminder)
 
         launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
 
@@ -130,5 +148,23 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
 
     }
 
+    @Test
+    fun deleteAllReminders_displayNoDataTextView() = runBlockingTest {
 
+        val reminder = ReminderDTO(
+            "title",
+            "desc",
+            "loc",
+            0.0, 0.0
+        )
+
+        database.reminderDao().saveReminder(reminder)
+
+        launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+
+        database.reminderDao().deleteAllReminders()
+
+        onView(withId(R.id.noDataTextView)).check(matches(isDisplayed()))
+
+    }
 }
