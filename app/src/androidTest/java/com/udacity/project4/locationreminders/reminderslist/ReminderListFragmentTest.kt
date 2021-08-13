@@ -165,7 +165,7 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
 
     @Test
     fun deleteAllReminders_displayNoDataTextView() = runBlockingTest {
-//
+
         val remindersDao: RemindersDao = get()
 
         val reminder = ReminderDTO(
