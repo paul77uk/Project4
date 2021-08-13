@@ -19,6 +19,7 @@ import com.udacity.project4.R
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.local.LocalDB
+import com.udacity.project4.locationreminders.data.local.RemindersDao
 import com.udacity.project4.locationreminders.data.local.RemindersDatabase
 import com.udacity.project4.locationreminders.data.local.RemindersLocalRepository
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
@@ -49,9 +50,9 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
     //    TODO: test the navigation of the fragments.
 //    TODO: test the displayed data on the UI.
 //    TODO: add testing for the error messages.
-    private lateinit var repository: ReminderDataSource
+//    private lateinit var repository: ReminderDataSource
     private lateinit var appContext: Application
-    private lateinit var database: RemindersDatabase
+//    private lateinit var database: RemindersDatabase
 
     @get: Rule
     var instantExecutorRule = InstantTaskExecutorRule()
@@ -92,6 +93,7 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
             }
 
             single { RemindersLocalRepository(get()) as ReminderDataSource }
+
             single { LocalDB.createRemindersDao(appContext) }
             // in-memory database dao
             single {
@@ -111,11 +113,11 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
             modules(listOf(testModules))
         }
 
-        repository = get()
-
-        runBlocking {
-            repository.deleteAllReminders()
-        }
+//        repository = get()
+//
+//        runBlocking {
+//            repository.deleteAllReminders()
+//        }
     }
 
     //navigation test
@@ -142,6 +144,8 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
     @Test
     fun reminderListFragment_DisplayedInUi() = runBlockingTest {
 
+        val remindersDao: RemindersDao = get()
+
         val reminder = ReminderDTO(
             "title",
             "desc",
@@ -149,7 +153,8 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
             0.0, 0.0
         )
 
-        database.reminderDao().saveReminder(reminder)
+
+        remindersDao.saveReminder(reminder)
 
         launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
 
@@ -162,6 +167,8 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
     @Test
     fun deleteAllReminders_displayNoDataTextView() = runBlockingTest {
 
+        val remindersDao: RemindersDao = get()
+
         val reminder = ReminderDTO(
             "title",
             "desc",
@@ -169,11 +176,11 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
             0.0, 0.0
         )
 
-        database.reminderDao().saveReminder(reminder)
+        remindersDao.saveReminder(reminder)
 
         launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
 
-        database.reminderDao().deleteAllReminders()
+        remindersDao.deleteAllReminders()
 
         onView(withId(R.id.noDataTextView)).check(matches(isDisplayed()))
 
