@@ -94,7 +94,6 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
 
             single { RemindersLocalRepository(get()) as ReminderDataSource }
 
-            single { LocalDB.createRemindersDao(appContext) }
             // in-memory database dao
             single {
                 Room.inMemoryDatabaseBuilder(
