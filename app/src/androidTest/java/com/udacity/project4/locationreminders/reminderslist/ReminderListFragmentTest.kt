@@ -181,6 +181,8 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
 
         remindersDao.deleteAllReminders()
 
+        launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+
         onView(withId(R.id.noDataTextView)).check(matches(isDisplayed()))
 
     }
