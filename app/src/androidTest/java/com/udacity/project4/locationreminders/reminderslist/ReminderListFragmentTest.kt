@@ -56,19 +56,19 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
     @get: Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
-    @Before
-    fun initDB() {
+//    @Before
+//    fun initDB() {
+//
+//        database = Room.inMemoryDatabaseBuilder(
+//            ApplicationProvider.getApplicationContext(),
+//            RemindersDatabase::class.java
+//        ).allowMainThreadQueries().build()
+//    }
 
-        database = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            RemindersDatabase::class.java
-        ).allowMainThreadQueries().build()
-    }
-
-    @After
-    fun closeDB() {
-        database.close()
-    }
+//    @After
+//    fun closeDB() {
+//        database.close()
+//    }
 
     @Before
     fun setup() {
@@ -93,6 +93,17 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
 
             single { RemindersLocalRepository(get()) as ReminderDataSource }
             single { LocalDB.createRemindersDao(appContext) }
+            // in-memory database dao
+            single {
+                Room.inMemoryDatabaseBuilder(
+                    ApplicationProvider.getApplicationContext(),
+                    RemindersDatabase::class.java
+                )
+                    // disable the main thread query check for Room
+                    .allowMainThreadQueries()
+                    .build()
+                    .reminderDao()
+            }
         }
 
         startKoin {
