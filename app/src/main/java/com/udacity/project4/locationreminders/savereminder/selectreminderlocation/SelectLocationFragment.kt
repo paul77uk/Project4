@@ -232,6 +232,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 enableMyLocation()
             }
+        } else {
+            Toast.makeText(activity, R.string.permission_denied_explanation, Toast.LENGTH_LONG).show()
         }
     }
 }
