@@ -233,7 +233,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 enableMyLocation()
             }
         } else {
-            Toast.makeText(activity, R.string.permission_denied_explanation, Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, resources.getString(R.string.permission_denied_explanation), Toast.LENGTH_LONG).show()
         }
     }
 }
