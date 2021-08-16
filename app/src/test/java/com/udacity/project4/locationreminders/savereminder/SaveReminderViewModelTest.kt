@@ -1,14 +1,20 @@
 package com.udacity.project4.locationreminders.savereminder
 
+import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.viewModelScope
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.udacity.project4.R
+import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.locationreminders.MainCoroutineRule
 import com.udacity.project4.locationreminders.data.FakeDataSource
+import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.getOrAwaitValue
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
@@ -144,7 +150,7 @@ class SaveReminderViewModelTest {
             R.string.err_select_location,
             R.string.err_enter_title,
             R.string.err_select_location,
-            R.string.err_enter_title,
+            R.string.err_enter_title
         )
 
         val value = expected == snackBarList
@@ -165,5 +171,26 @@ class SaveReminderViewModelTest {
         assertThat(saveReminderViewModel.showLoading.getOrAwaitValue(), `is`(true))
 
     }
+
+    @Test
+    fun saveReminder_showToastValue_returnsTrue() = runBlockingTest{
+
+        val reminder = ReminderDataItem(
+            "test",
+            "desc",
+            "loc",
+            1.0,
+            2.0
+        )
+
+        saveReminderViewModel.saveReminder(reminder)
+
+        assertThat(saveReminderViewModel.showToast.getOrAwaitValue(), `is`(
+            getApplicationContext<Context>()
+                .getString(R.string.reminder_saved))
+        )
+
+    }
+
 
 }
