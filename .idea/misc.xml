@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/udacity_nanodegree_projects/nd940-android-kotlin-c4-starter-master/starter/app/src/main/res/drawable/ic_add.xml" value="0.1796875" />
+        <entry key="..\:/udacity_nanodegree_projects/nd940-android-kotlin-c4-starter-master/starter/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.1796875" />
         <entry key="..\:/udacity_nanodegree_projects/nd940-android-kotlin-c4-starter-master/starter/app/src/main/res/layout/fragment_save_reminder.xml" value="0.16354166666666667" />
       </map>
     </option>

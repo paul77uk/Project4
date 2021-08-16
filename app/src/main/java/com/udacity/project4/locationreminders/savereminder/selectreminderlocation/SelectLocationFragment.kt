@@ -20,7 +20,6 @@ import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
-import com.udacity.project4.locationreminders.reminderslist.ReminderListFragmentDirections
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
@@ -231,9 +230,13 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         if (requestCode == REQUEST_LOCATION_PERMISSION) {
             if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 enableMyLocation()
+            } else {
+                Toast.makeText(
+                    activity,
+                    resources.getString(R.string.permission_denied_explanation),
+                    Toast.LENGTH_LONG
+                ).show()
             }
-        } else {
-            Toast.makeText(activity, resources.getString(R.string.permission_denied_explanation), Toast.LENGTH_LONG).show()
         }
     }
 }
