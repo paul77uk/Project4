@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -72,7 +71,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         //         send back the selected location details to the view model
         //         and navigate back to the previous fragment to save the reminder and add the geofence
 
-//        POSSIBLE SOLUTION
+
         if (pointOfInterest != null) {
             _viewModel.selectedPOI.value = pointOfInterest
             _viewModel.reminderSelectedLocationStr.value = pointOfInterest!!.name
@@ -83,7 +82,6 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             // Set navigation command to back
             _viewModel.navigationCommand.value = NavigationCommand.Back
         } else {
-            // Tell user that no location has been selected
             Toast.makeText(context, "Select a location", Toast.LENGTH_LONG).show()
         }
     }
@@ -214,7 +212,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         if (isPermissionGranted()) {
             map.setMyLocationEnabled(true)
         } else {
-            requestPermissions(arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),REQUEST_LOCATION_PERMISSION)
+            requestPermissions(
+                arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION_PERMISSION
+            )
 
         }
     }
