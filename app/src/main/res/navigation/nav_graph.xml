@@ -28,8 +28,7 @@
             app:destination="@id/reminderListFragment" />
         <action
             android:id="@+id/action_saveReminderFragment_to_selectLocationFragment"
-            app:destination="@id/selectLocationFragment"
-            app:popUpTo="@id/authenticationActivity" />
+            app:destination="@id/selectLocationFragment" />
     </fragment>
 
     <fragment
@@ -38,7 +37,7 @@
         android:label="Select Location" >
     <action
         android:id="@+id/action_pop_selectLocationFragment_to_saveReminderFragment"
-        app:popUpTo="@id/saveReminderFragment" />
+        app:destination="@id/saveReminderFragment" />
     </fragment>
 
     <fragment
