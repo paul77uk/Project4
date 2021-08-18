@@ -170,7 +170,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         map.setOnPoiClickListener { poi ->
 
 //            map.clear()
-//            pointOfInterest = poi
+            pointOfInterest = poi
 //
             val poiMarker = map.addMarker(
                 MarkerOptions()
