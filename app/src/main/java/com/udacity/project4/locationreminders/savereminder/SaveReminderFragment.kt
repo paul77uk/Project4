@@ -73,16 +73,9 @@ class SaveReminderFragment : BaseFragment() {
 
         binding.viewModel = _viewModel
 
-        geofencingClient = LocationServices.getGeofencingClient(requireContext())
-
 //        sendNotification(requireContext(), reminderData)
 
         return binding.root
-    }
-
-    override fun onStart() {
-        super.onStart()
-        checkPermissionsAndStartGeofencing()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,6 +88,8 @@ class SaveReminderFragment : BaseFragment() {
         }
 
         binding.saveReminder.setOnClickListener {
+            checkPermissionsAndStartGeofencing()
+
             val title = _viewModel.reminderTitle.value
             val description = _viewModel.reminderDescription.value
             val location = _viewModel.reminderSelectedLocationStr.value
