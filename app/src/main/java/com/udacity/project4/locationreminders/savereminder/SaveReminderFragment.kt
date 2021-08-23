@@ -88,7 +88,9 @@ class SaveReminderFragment : BaseFragment() {
         }
 
         binding.saveReminder.setOnClickListener {
+
             checkPermissionsAndStartGeofencing()
+            geofencingClient = LocationServices.getGeofencingClient(requireContext())
 
             val title = _viewModel.reminderTitle.value
             val description = _viewModel.reminderDescription.value
