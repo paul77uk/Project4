@@ -51,9 +51,9 @@ class SaveReminderFragment : BaseFragment() {
     private lateinit var contxt: Context
 
     private val geofencePendingIntent: PendingIntent by lazy {
-        val intent = Intent(requireContext(), GeofenceBroadcastReceiver::class.java)
+        val intent = Intent(contxt, GeofenceBroadcastReceiver::class.java)
         intent.action = ACTION_GEOFENCE_EVENT
-        PendingIntent.getBroadcast(requireContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        PendingIntent.getBroadcast(contxt, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     override fun onCreateView(
@@ -83,7 +83,7 @@ class SaveReminderFragment : BaseFragment() {
 
         binding.saveReminder.setOnClickListener {
 
-            checkPermissionsAndStartGeofencing()
+//            checkPermissionsAndStartGeofencing()
             geofencingClient = LocationServices.getGeofencingClient(requireContext())
 
             val title = _viewModel.reminderTitle.value
@@ -98,9 +98,9 @@ class SaveReminderFragment : BaseFragment() {
 
             reminderData = ReminderDataItem(title, description, location, latitude, longitude)
 
-            if (_viewModel.validateAndSaveReminder(reminderData)) {
+//            if (_viewModel.validateAndSaveReminder(reminderData)) {
                 checkPermissionsAndStartGeofencing()
-            }
+//            }
         }
     }
 
@@ -252,6 +252,7 @@ class SaveReminderFragment : BaseFragment() {
                         addOnSuccessListener {
                             _viewModel.showSnackBarInt.value = R.string.geofences_added
                             Log.e("Add Geofence", geofence.requestId)
+                            _viewModel.validateAndSaveReminder(reminderData)
                         }
                         addOnFailureListener {
                             _viewModel.showSnackBarInt.value = R.string.geofences_not_added
