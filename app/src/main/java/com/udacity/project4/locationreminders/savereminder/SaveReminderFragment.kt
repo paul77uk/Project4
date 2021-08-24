@@ -2,7 +2,9 @@ package com.udacity.project4.locationreminders.savereminder
 
 import android.Manifest
 import android.annotation.TargetApi
+import android.app.Activity
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -39,15 +41,6 @@ class SaveReminderFragment : BaseFragment() {
     private val runningQOrLater =
         android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q
 
-//      POSS SOLUTION
-//    companion object {
-//        private const val TAG = "SaveReminderFragment"
-//        private const val REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE = 33
-//        private const val REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE = 34
-//        private const val REQUEST_TURN_DEVICE_LOCATION_ON = 29
-//        private const val LOCATION_PERMISSION_INDEX = 0
-//        private const val BACKGROUND_LOCATION_PERMISSION_INDEX = 1
-//    }
 
     //Get the view model this time as a single to be shared with the another fragment
     override val _viewModel: SaveReminderViewModel by inject()
@@ -55,6 +48,7 @@ class SaveReminderFragment : BaseFragment() {
 
     private lateinit var geofencingClient: GeofencingClient
     private lateinit var reminderData: ReminderDataItem
+    private lateinit var contxt: Context
 
     private val geofencePendingIntent: PendingIntent by lazy {
         val intent = Intent(requireContext(), GeofenceBroadcastReceiver::class.java)
@@ -113,6 +107,11 @@ class SaveReminderFragment : BaseFragment() {
     override fun onDestroy() {
         super.onDestroy()
         _viewModel.onClear()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        contxt = context
     }
 
     private fun checkPermissionsAndStartGeofencing() {
@@ -196,7 +195,7 @@ class SaveReminderFragment : BaseFragment() {
             if (exception is ResolvableApiException && resolve) {
                 try {
                     exception.startResolutionForResult(
-                        requireActivity(),
+                        contxt as Activity,
                         REQUEST_TURN_DEVICE_LOCATION_ON
                     )
                 } catch (sendEx: IntentSender.SendIntentException) {
