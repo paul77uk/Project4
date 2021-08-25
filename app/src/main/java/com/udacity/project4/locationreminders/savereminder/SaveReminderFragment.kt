@@ -246,8 +246,8 @@ class SaveReminderFragment : BaseFragment() {
                 .addGeofence(geofence)
                 .build()
 
-            geofencingClient.removeGeofences(geofencePendingIntent)?.run {
-                addOnCompleteListener {
+//            geofencingClient.removeGeofences(geofencePendingIntent)?.run {
+//                addOnCompleteListener {
                     geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)?.run {
                         addOnSuccessListener {
                             _viewModel.showSnackBarInt.value = R.string.geofences_added
@@ -261,9 +261,9 @@ class SaveReminderFragment : BaseFragment() {
                             }
                         }
                     }
-                }
-
-            }
+//                }
+//
+//            }
         }
     }
 

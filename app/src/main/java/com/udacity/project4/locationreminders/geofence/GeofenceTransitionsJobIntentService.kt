@@ -67,27 +67,30 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
     //TODO: get the request id of the current geofence
     private fun sendNotification(triggeringGeofences: List<Geofence>) {
 
-        val requestId = triggeringGeofences[0].requestId
+            var i = 0
 
         //Get the local repository instance
         val remindersLocalRepository: RemindersLocalRepository by inject()
 //        Interaction to the repository has to be through a coroutine scope
         CoroutineScope(coroutineContext).launch(SupervisorJob()) {
             //get the reminder with the request id
-            val result = remindersLocalRepository.getReminder(requestId)
-            if (result is Result.Success<ReminderDTO>) {
-                val reminderDTO = result.data
-                //send a notification to the user with the reminder details
-                sendNotification(
-                    this@GeofenceTransitionsJobIntentService, ReminderDataItem(
-                        reminderDTO.title,
-                        reminderDTO.description,
-                        reminderDTO.location,
-                        reminderDTO.latitude,
-                        reminderDTO.longitude,
-                        reminderDTO.id
+            while (i < triggeringGeofences.size){
+                val result = remindersLocalRepository.getReminder(triggeringGeofences[i].requestId)
+                if (result is Result.Success<ReminderDTO>) {
+                    val reminderDTO = result.data
+                    //send a notification to the user with the reminder details
+                    sendNotification(
+                        this@GeofenceTransitionsJobIntentService, ReminderDataItem(
+                            reminderDTO.title,
+                            reminderDTO.description,
+                            reminderDTO.location,
+                            reminderDTO.latitude,
+                            reminderDTO.longitude,
+                            reminderDTO.id
+                        )
                     )
-                )
+                }
+                i++
             }
         }
     }
