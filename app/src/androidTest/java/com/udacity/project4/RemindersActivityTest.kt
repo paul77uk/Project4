@@ -6,7 +6,8 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.withDecorView
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -112,25 +113,11 @@ class RemindersActivityTest :
 
         onView(withId(R.id.saveReminder)).perform(click())
 
-
         onView(withText(R.string.err_select_location)).check(matches(isDisplayed()))
 
-        onView(withText(R.string.reminder_saved)).inRoot(
-            withDecorView(
-                not(
-                    `is`(
-                        getActivity(
-                            activityScenario
-                        )?.window?.decorView
-                    )
-                )
-            )
-        )
-            .check(
-                matches(
-                    isDisplayed()
-                )
-            )
+        onView(withText(R.string.reminder_saved))
+            .inRoot(withDecorView(not(`is`(getActivity(activityScenario)?.window?.decorView))))
+            .check(matches(isDisplayed()))
     }
 
     // get activity context
