@@ -98,9 +98,9 @@ class SaveReminderFragment : BaseFragment() {
 
             reminderData = ReminderDataItem(title, description, location, latitude, longitude)
 
-//            if (_viewModel.validateAndSaveReminder(reminderData)) {
+            if (_viewModel.validateAndSaveReminder(reminderData)) {
                 checkPermissionsAndStartGeofencing()
-//            }
+            }
         }
     }
 

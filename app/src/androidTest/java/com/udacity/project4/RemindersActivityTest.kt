@@ -1,5 +1,6 @@
 package com.udacity.project4
 
+import android.app.Activity
 import android.app.Application
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
@@ -7,8 +8,9 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers.withDecorView
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.udacity.project4.locationreminders.RemindersActivity
@@ -19,7 +21,10 @@ import com.udacity.project4.locationreminders.reminderslist.RemindersListViewMod
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.util.DataBindingIdlingResource
 import com.udacity.project4.util.monitorActivity
+import com.udacity.project4.utils.EspressoIdlingResource
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -30,9 +35,7 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.get
-import com.udacity.project4.utils.EspressoIdlingResource
-import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.*
+import org.hamcrest.CoreMatchers.`is`
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -82,12 +85,12 @@ class RemindersActivityTest :
     }
 
 
-//    TODO: add End to End testing to the app
-@Before
-fun registerIdlingResources() {
-    IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
-    IdlingRegistry.getInstance().register(dataBindingIdlingResource)
-}
+    //    TODO: add End to End testing to the app
+    @Before
+    fun registerIdlingResources() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().register(dataBindingIdlingResource)
+    }
 
     @After
     fun unregisterIdlingResources() {
@@ -108,7 +111,7 @@ fun registerIdlingResources() {
 
         onView(withText(R.string.err_select_location)).check(matches(isDisplayed()))
 
-
+//        onView(withText(R.string.reminder_saved)).inRoot(isToast()).check(matches(isDisplayed()))
     }
 
 }

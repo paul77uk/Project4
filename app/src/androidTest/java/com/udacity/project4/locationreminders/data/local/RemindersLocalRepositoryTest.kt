@@ -46,6 +46,7 @@ class RemindersLocalRepositoryTest {
         database.close()
     }
 
+    @Test
     fun saveReminder_matchesRepository() = runBlocking {
 
         val reminder = ReminderDTO(
@@ -66,6 +67,26 @@ class RemindersLocalRepositoryTest {
         assertThat(repo[0].latitude, `is`(reminder.latitude))
         assertThat(repo[0].longitude, `is`(reminder.longitude))
         assertThat(repo[0].location, `is`(reminder.location))
+
+    }
+
+    @Test
+    fun dataNotFound_errorMessageDisplayed() = runBlocking {
+
+        val reminder = ReminderDTO(
+            "title",
+            "dec",
+            "loc",
+            0.0,
+            0.0,
+            "0"
+        )
+
+        // reminder not saved so there will be no reminder with id "0"
+
+        val result = (repository.getReminder(reminder.id) as Result.Error).message
+
+        assertThat(result, `is`("Reminder not found!"))
 
     }
 
