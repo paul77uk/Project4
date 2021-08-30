@@ -35,7 +35,6 @@ import org.koin.core.context.stopKoin
 import org.koin.dsl.module
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.get
-import org.hamcrest.CoreMatchers.`is`
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -111,7 +110,31 @@ class RemindersActivityTest :
 
         onView(withText(R.string.err_select_location)).check(matches(isDisplayed()))
 
-//        onView(withText(R.string.reminder_saved)).inRoot(isToast()).check(matches(isDisplayed()))
+        onView(withText(R.string.reminder_saved)).inRoot(
+            withDecorView(
+                not(
+                    `is`(
+                        getActivity(
+                            activityScenario
+                        )?.window?.decorView
+                    )
+                )
+            )
+        )
+            .check(
+                matches(
+                    isDisplayed()
+                )
+            )
+    }
+
+    // get activity context
+    private fun getActivity(activityScenario: ActivityScenario<RemindersActivity>): Activity? {
+        var activity: Activity? = null
+        activityScenario.onActivity {
+            activity = it
+        }
+        return activity
     }
 
 }
