@@ -118,14 +118,18 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         val longitude = -6.14328866314449
         val zoomLevel = 15f
 
+        poiName = "Home"
+
         // Add a market in Sydney and move the camera
         val homeLatLng = LatLng(latitude, longitude)
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(homeLatLng, zoomLevel))
-        map.addMarker(MarkerOptions().position(homeLatLng).title("Home"))
+        map.addMarker(MarkerOptions().position(homeLatLng).title(poiName))
+
         setMapLongClick(map)
         setPoiClick(map)
         setMapStyle(map)
         enableMyLocation()
+
     }
 
 ////  TODO: zoom to the user location after taking his permission
@@ -170,6 +174,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
 //            map.clear()
             pointOfInterest = poi
+
+            _viewModel.reminderSelectedLocationStr.value = poiName
 //
             val poiMarker = map.addMarker(
                 MarkerOptions()
@@ -179,7 +185,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
             poiName = poi.name
 
-            poiMarker.showInfoWindow()
+            poiMarker?.showInfoWindow()
         }
     }
 
