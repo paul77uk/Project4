@@ -98,9 +98,9 @@ class SaveReminderFragment : BaseFragment() {
 
             reminderData = ReminderDataItem(title, description, location, latitude, longitude)
 
-            if (_viewModel.validateAndSaveReminder(reminderData)) {
-                checkPermissionsAndStartGeofencing()
-            }
+//            if (_viewModel.validateAndSaveReminder(reminderData)) {
+            checkPermissionsAndStartGeofencing()
+//            }
         }
     }
 
@@ -155,10 +155,8 @@ class SaveReminderFragment : BaseFragment() {
             else -> REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
         }
         Log.d(TAG, "Request foreground only location permission")
-        ActivityCompat.requestPermissions(
-            requireActivity(),
-            permissionsArray,
-            resultCode
+        requestPermissions(
+            permissionsArray, resultCode
         )
     }
 
@@ -248,19 +246,19 @@ class SaveReminderFragment : BaseFragment() {
 
 //            geofencingClient.removeGeofences(geofencePendingIntent)?.run {
 //                addOnCompleteListener {
-                    geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)?.run {
-                        addOnSuccessListener {
-                            _viewModel.showSnackBarInt.value = R.string.geofences_added
-                            Log.e("Add Geofence", geofence.requestId)
-                            _viewModel.validateAndSaveReminder(reminderData)
-                        }
-                        addOnFailureListener {
-                            _viewModel.showSnackBarInt.value = R.string.geofences_not_added
-                            if ((it.message != null)) {
-                                Log.w(TAG, it.message!!)
-                            }
-                        }
+            geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)?.run {
+                addOnSuccessListener {
+                    _viewModel.showSnackBarInt.value = R.string.geofences_added
+                    Log.e("Add Geofence", geofence.requestId)
+                    _viewModel.validateAndSaveReminder(reminderData)
+                }
+                addOnFailureListener {
+                    _viewModel.showSnackBarInt.value = R.string.geofences_not_added
+                    if ((it.message != null)) {
+                        Log.w(TAG, it.message!!)
                     }
+                }
+            }
 //                }
 //
 //            }
