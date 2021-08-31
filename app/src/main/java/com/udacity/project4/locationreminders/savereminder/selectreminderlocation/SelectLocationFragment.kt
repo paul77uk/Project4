@@ -82,7 +82,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             // Set navigation command to back
             _viewModel.navigationCommand.value = NavigationCommand.Back
         } else {
-            Toast.makeText(context, "Select a location", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.err_select_location), Toast.LENGTH_LONG).show()
         }
     }
 

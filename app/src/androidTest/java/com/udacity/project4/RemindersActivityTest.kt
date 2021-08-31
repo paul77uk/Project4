@@ -111,9 +111,9 @@ class RemindersActivityTest :
         onView(withId(R.id.map)).perform(click())
         onView(withId(R.id.save_button)).perform(click())
 
-        onView(withId(R.id.saveReminder)).perform(click())
-
         onView(withText(R.string.err_select_location)).check(matches(isDisplayed()))
+
+        onView(withId(R.id.saveReminder)).perform(click())
 
         onView(withText(R.string.reminder_saved))
             .inRoot(withDecorView(not(`is`(getActivity(activityScenario)?.window?.decorView))))
