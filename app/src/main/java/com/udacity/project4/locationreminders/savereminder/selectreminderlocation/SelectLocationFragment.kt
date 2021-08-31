@@ -1,6 +1,5 @@
 package com.udacity.project4.locationreminders.savereminder.selectreminderlocation
 
-
 import android.Manifest
 import android.content.pm.PackageManager
 import android.content.res.Resources
@@ -82,7 +81,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             // Set navigation command to back
             _viewModel.navigationCommand.value = NavigationCommand.Back
         } else {
-            Toast.makeText(context, getString(R.string.err_select_location), Toast.LENGTH_LONG).show()
+            Toast.makeText(context, getString(R.string.err_select_location), Toast.LENGTH_LONG)
+                .show()
         }
     }
 
@@ -209,13 +209,12 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun enableMyLocation() {
         if (isPermissionGranted()) {
-            map.setMyLocationEnabled(true)
+            map.isMyLocationEnabled = true
         } else {
             requestPermissions(
                 arrayOf<String>(Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_LOCATION_PERMISSION
             )
-
         }
     }
 
