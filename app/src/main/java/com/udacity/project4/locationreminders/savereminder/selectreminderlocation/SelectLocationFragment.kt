@@ -156,13 +156,13 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
             _viewModel.latitude.value = latLng.latitude
             _viewModel.longitude.value = latLng.longitude
-            _viewModel.reminderSelectedLocationStr.value = poiName
+            _viewModel.reminderSelectedLocationStr.value = "random location"
             _viewModel.navigationCommand.value = NavigationCommand.Back
 
             map.addMarker(
                 MarkerOptions()
                     .position(latLng)
-                    .title(poiName)
+                    .title("random location")
                     .snippet(snippet)
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
             )

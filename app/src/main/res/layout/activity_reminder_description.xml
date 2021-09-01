@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -23,24 +22,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            tools:text="Title"
-            android:textSize="@dimen/text_size_large"/>
+            android:text="@{reminderDataItem.title}"
+            android:textSize="@dimen/text_size_large"
+            tools:text="Title" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            tools:text="Description"
-            android:textSize="@dimen/text_size_medium"/>
+            android:text="@{reminderDataItem.description}"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="Description" />
 
         <TextView
             android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            tools:text="Location"
-            android:textSize="@dimen/text_size_medium"/>
+            android:text="@{reminderDataItem.location}"
+            android:textSize="@dimen/text_size_medium"
+            tools:text="Location" />
 
     </LinearLayout>
 </layout>
